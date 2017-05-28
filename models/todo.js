@@ -1,6 +1,6 @@
 const Model = require('./main')
 class Todo extends Model {
-    construtor(form={}) {
+    constructor(form={}) {
         super()
         this.id = form.id
         this.title = form.title || ''
@@ -19,8 +19,9 @@ class Todo extends Model {
     }
     static completed(id, completed) {
         const t = Todo.get(id)
+        console.log('debug t', t)
         t.completed = completed
-        t.svae()
+        t.save()
         return t
     }
 }

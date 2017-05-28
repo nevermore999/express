@@ -1,7 +1,7 @@
 const Model = require('./main')
 const crypto = require('crypto')
 class User extends Model {
-    construtor(form={}) {
+    constructor(form={}) {
         super()
         this.id = form.id
         this.username = form.username || ''
@@ -11,6 +11,7 @@ class User extends Model {
     static create(form={}) {
         form.password = this.saltedPassword(form.password)
         const u = super.create(form)
+        console.log('debug uuuu', u)
         u.save()
         return u
     }
@@ -19,17 +20,18 @@ class User extends Model {
             const algorithm = 'sha1'
             const hash = crypto.createHash(algorithm)
             hash.update(s)
-            const h = hash.diget('hex')
+            const h = hash.digest('hex')
             return h
         }
         const hash1 = _sha1(password)
         const hash2 = _sha1(hash1 + salt)
+        return hash2
     }
     validateAuth(form) {
         const {username, password} = form
         const pwd = this.constructor.saltedPassword(password)
         const usernameEquals = this.username === username
-        const passwordEquals = this.password === password
+        const passwordEquals = this.password === pwd
         return usernameEquals && passwordEquals
     }
     static login(form={}) {
@@ -51,4 +53,5 @@ class User extends Model {
         }
     }
 }
+
 module.exports = User

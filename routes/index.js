@@ -16,8 +16,11 @@ index.get('/login', (request, response) => {
 })
 index.post('/login', (request, response) => {
     const form = request.body
+    console.log('debug form', form)
     const u = User.findOne('username', form.username)
+console.log('debug u', u)
     if (u.validateAuth(form)) {
+        console.log('debug request', request.session.uid)
         request.session.uid = u.id
         response.redirect('/')
     }
@@ -27,7 +30,9 @@ index.get('/register', (request, response) => {
 })
 index.post('/register', (request, response) => {
     const form = request.body
+    console.log('debug form', form)
     const u = User.create(form)
+    console.log('debug u', u)
     response.redirect('/')
 })
 index.get('/logout', (request, response) => {

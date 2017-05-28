@@ -6,7 +6,7 @@ const currentUser = (request) => {
     if (u === null) {
         const fakeUser = {
             id: fakeId,
-            username: '游客'，
+            username: '游客',
         }
         return fakeUser
     }

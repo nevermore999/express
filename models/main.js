@@ -11,19 +11,19 @@ const save = (data, path) => {
 }
 const load = (path) => {
     const options = {
-        encoding: utf-8,
+        encoding: 'utf-8',
     }
     ensureExists(path)
     const s = fs.readFileSync(path, options)
-    const data = JSON.pares(s)
+    const data = JSON.parse(s)
     return data
 }
 class Model {
     static dbpath() {
-        const classname = this.name.toLowercase()
+        const classname = this.name.toLowerCase()
         const path = require('path')
         const filename = `${classname}.txt`
-        const p = path.join(_dirname, '../db', filename)
+        const p = path.join(__dirname, '../db', filename)
         return p
     }
     static _newFromeDict(dict) {
@@ -34,7 +34,7 @@ class Model {
         const path = this.dbpath()
         const models = load(path)
         const ms = models.map((m) => {
-            const instance = this._newFromDict(m)
+            const instance = this._newFromeDict(m)
             return instance
         })
         return ms
@@ -61,13 +61,15 @@ class Model {
         return this.findOne('id', id)
     }
     save() {
-        const models = this.construtor.all()
+        const models = this.constructor.all()
         if (this.id === undefined) {
-            if (models.length > 1) {
+            console.log('debug this 1', this)
+            if (models.length > 0) {
                 const last = models[models.length - 1]
                 this.id = last.id + 1
             } else {
                 this.id = 1
+                console.log('debug this', this)
             }
             models.push(this)
         } else {
@@ -75,9 +77,10 @@ class Model {
             if (index > -1) {
                 models[index] = this
             }
-            const path = this.constructor.dbpath()
-            save(models, path)
         }
+        const path = this.constructor.dbpath()
+        console.log('debug', models)
+        save(models, path)
     }
     static remove(id) {
         const models = this.all()
@@ -93,4 +96,4 @@ class Model {
         return s
     }
 }
-modeule.exports = Model
+module.exports = Model

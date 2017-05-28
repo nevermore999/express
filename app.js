@@ -6,18 +6,18 @@ const {secretKey} = require('./config')
 const todo = require('./routes/todo')
 const index = require('./routes/index')
 const app = express()
-app.user(bodyParser.urlencoded({
+app.use(bodyParser.urlencoded({
     extended: true,
 }))
-app.user(session({
+app.use(session({
     secret: secretKey,
 }))
-numjucks.configure('templates', {
+nunjucks.configure('templates', {
     autoescape: true,
     express: app,
     noCache: true,
 })
-const asset = __driname + '/static'
+const asset = __dirname + '/static'
 app.use('/static', express.static(asset))
 app.use('/', index)
 app.use('/todo', todo)

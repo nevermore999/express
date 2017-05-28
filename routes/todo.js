@@ -6,10 +6,10 @@ todo.get('/', (request, response) => {
     const args = {
         todos: todolist,
     }
-    response.render('todo/idnex.html', args)
+    response.render('todo/index.html', args)
 })
 todo.post('/add', (request, response) => {
-    cosnt form = request.body
+    const form = request.body
     const t = Todo.create(form)
     response.redirect('/todo')
 })
@@ -20,20 +20,23 @@ todo.get('/delete/:todoId', (request, response) => {
 })
 todo.get('/edit/:todoId', (request, response) => {
     const id = Number(request.params.todoId)
+    console.log('debug id', id)
     const t = Todo.get(id)
+console.log('debug t', t)
     const args = {
         todo: t,
     }
-    request.redirect('todo/edit.html', args)
+    response.render('todo/edit.html', args)
 })
-todo.post('update', (request, response) => {
+todo.post('/update', (request, response) => {
     const form = request.body
     const t = Todo.update(form)
     response.redirect('/todo')
 })
-todo.get('/completed/:todoId', (request, response) => {
+todo.get('/complete/:todoId', (request, response) => {
     const id = Number(request.params.todoId)
-    cosnt t = Todo.completed(id, true)
+    console.log('debug id', id)
+    Todo.completed(id, true)
     response.redirect('/todo')
 })
 module.exports = todo
