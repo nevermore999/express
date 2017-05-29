@@ -30,6 +30,30 @@ class Model {
         const m = new this(dict)
         return m
     }
+    //增加静态方法，判断obj1是否包含obj2
+    static _contains = (obj1, obj2) => {
+        let result = false
+        for(let i in obj2) {
+            if(obj1[i] && obj2[i]) {
+                if (obj1[i] === obj2[i]) {
+                    result = true
+                }
+            } else {
+                return false
+            }
+        }
+        return result
+    }
+    //增加静态方法，返回数据库中所有符合query的数据
+    static fetch = (query) => {
+        const models = this.all()
+        const result = []
+        for(let item in models) {
+            if (this._contains(item, query)) {
+                result.push(item)
+            }
+        }
+    }
     static all() {
         const path = this.dbpath()
         const models = load(path)
@@ -44,18 +68,28 @@ class Model {
         instance.save()
         return instance
     }
+    //更新find方法
     static find(key, value) {
+        if (typeof(key) === 'string') {
+            return this.fetchBy(key, value)
+        } else {
+            return this.fetch(key)
+        }
+    }
+    //增加fetchBy方法
+    static fetchBy = (key, value) => {
         const all = this.all()
         const models = all.filter(m => m[key] === value)
         return models
     }
+    //更新findOne方法
     static findOne(key, value) {
-        const all = this.all()
-        let m = all.find(e => e[key] === value)
-        if (m === undefined) {
-            m = null
+        const result = this.find(key, value)
+        if (result.length > 0) {
+            return result[0]
+        } else {
+            return null
         }
-        return m
     }
     static get(id) {
         return this.findOne('id', id)
